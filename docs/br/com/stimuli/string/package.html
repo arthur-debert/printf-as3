@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../print.css" type="text/css" media="print">
+<title>br.com.stimuli.string Details</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'br.com.stimuli.string Package - API Documentation';
+				var baseRef = '../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">Printf Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../all-classes.html')" href="../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../index-list.html')" href="../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../index.html?br/com/stimuli/string/package.html&amp;br/com/stimuli/string/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Package&nbsp;br.com.stimuli.string</td><td align="right" id="subNav" class="titleTableSubNav"><a href="package.html#methodSummary">Functions</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Package br.com.stimuli.string"); titleBar_setSubNav(false,false,false,false,false,false,false,false,false,false,true,false,false,false);}
+--></script>
+<div class="MainContent">
+<br>
+<a name="methodSummary"></a><div class="summarySection">
+<div class="summaryTableTitle">Public Functions</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Function</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#printf()">printf</a>(raw:String, ... rest):String</div>
+<div class="summaryTableDescription">
+          Creates a string with variable substitutions.</div>
+</td><td class="summaryTableOwnerCol">br.com.stimuli.string</td>
+</tr>
+</table>
+</div>
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Function detail</div>
+<a name="printf()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">printf</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">function</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function printf(raw:String, ... rest):String</code><p>
+          Creates a string with variable substitutions. Very similiar to printf, specially python's printf
+          </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">raw</span>:String</code> &mdash; The string to be substituted.
+          </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code>... <span class="label">rest</span></code> &mdash;  The objects to be substitued, can be positional or by properties inside the object (in wich case only one object can be passed)
+          </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>String</code> &mdash; The formated and substitued string. 
+          </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="package.html" target="">br.com.stimuli.string</a>
+</div>
+<br>
+<span class="label">Example</span>
+<br>          <pre>
+          import br.com.stimuli.string.printf;
+          // objects are substitued in the other they appear
+          
+          printf("This is an %s lybrary for creating %s", "Actioscript 3.0", "strings");
+          // outputs: "This is an Actioscript 3.0 lybrary for creating strings";
+          // you can also format numbers:
+          
+          printf("You can also display numbers like PI: %f, and format them to a fixed precision, such as PI with 3 decimal places %.3f", Math.PI, Math.PI);
+          // outputs: " You can also display numbers like PI: 3.141592653589793, and format them to a fixed precision, such as PI with 3 decimal places 3.142"
+          // Instead of positional (the order of arguments to print f, you can also use propertie of an object):
+          var userInfo : Object = {
+         "name": "Arthur Debert",
+         "email": "arthur<p></p>
+</div>
+<p></p>
+<center class="copyright">(c) Copyright 2007 Arthur Debert. All Rights Reserved. Project home: http://code.google.com/p/printf-as3/ ; MIT LICENSE</center>
+</div>
+</body>
+</html>
