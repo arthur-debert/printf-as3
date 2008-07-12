@@ -34,28 +34,37 @@ package br.com.stimuli.string{
         *   @see br.com.stimuli.string 
         */
          public function printf(raw : String, ...rest) : String{
+         	/**
+			* Pretty ugly!
+			*   basicaly
+			*   % -> the start of a substitution hole
+			*   (some_var_name) -> [optional] used in named substitutions
+			*   .xx -> [optional] the precision with witch numbers will be formated  
+			*   x -> the formatter (string, hexa, float, date part)
+			*/
+			var SUBS_RE : RegExp = /%(\((?P<var_name>[\w_\d]+)\))?(\.(?P<precision>[0-9]))?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])/ig;
+
             var matches : Array = [];
             var result : Object = SUBS_RE.exec(raw);
             var match : Match;
             var runs : int = 0;
             var numMatches : int = 0;
             var numberVariables : int = rest.length;
-            var isPositionalSubts : Boolean = numberVariables != 1;
+            // quick check if we find string subs amongst the text to match (something like %(foo)s
+            var isPositionalSubts : Boolean = !Boolean(raw.match(/%\(\s*[\w\d_]+\s*\)/));
+            trace(raw, isPositionalSubts);
             var replacementValue : *;
             var formater : String;
             var varName : String;
             var precision : String;
             // matched through the string, creating Match objects for easier later reuse
             while (Boolean(result)){
-                /*for (var prop : String in result){
-                    trace("\t " + prop + ": " + result[prop] );
-                }*/
                 match = new Match();
                 match.startIndex = result.index;
                 match.length = String(result[0]).length;
                 match.endIndex = match.startIndex + match.length;
                 match.content = String(result[0]);
-                
+                trace(match.content);
                 // try to get substitution properties
                 formater = result.formater;
                 varName = result.var_name;
@@ -161,9 +170,6 @@ package br.com.stimuli.string{
                 }
                 buffer.push(previous);
                 buffer.push(match.replacement);
-                /*trace(match);
-                                trace("\tlastmastch:", lastMatch? lastMatch.replacement : previous, ", match:", match.replacement  );
-                                trace( "\tprevious: '" + previous + "', match.replacement: '" + match.replacement + "'");*/
                 lastMatch = match;
                 
             }
@@ -209,18 +215,11 @@ const DATE_SECONDS_FORMATTER : String = "S";
 const DATE_TOLOCALE_FORMATTER : String = "c";
 
 
-/**
-*   @private
-* Pretty ugly!
-*   basicaly
-*   % -> the start of a substitution hole
-*   (some_var_name) -> [optional] used in named substitutions
-*   .xx -> [optional] the precision with witch numbers will be formated  
-*   x -> the formatter (string, hexa, float, date part)
-*/
-var SUBS_RE : RegExp = /%(\((?P<var_name>[\w_\d]+)\))?(\.(?P<precision>[0-9]))?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])/ig;  
+  
 
-
+/** @private
+ * Internal class that normalizes matching information.
+ */
 class Match{
     public var startIndex : int;
     public var endIndex : int;

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- requires flexunit on the build path !-->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="*"
+	xmlns:flexunit="flexunit.flexui.*"
+	creationComplete="onCreationComplete()">
+
+
+	<mx:Script source="AsPrintfTestRunner.as" />
+
+	<mx:Canvas width="100%" height="100%">
+		<flexunit:TestRunnerBase id="testRunner" width="100%" height="100%" />
+		
+	</mx:Canvas></mx:Application>
