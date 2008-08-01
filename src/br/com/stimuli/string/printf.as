@@ -214,7 +214,7 @@ const DATE_SECONDS_FORMATTER : String = "S";
 /** A string rep of a <code>Date</code> object on the current locale.*/
 const DATE_TOLOCALE_FORMATTER : String = "c";
 
-var version String = "$Id$"
+var version : String = "$Id$"
 
   
 
