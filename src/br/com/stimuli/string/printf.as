@@ -1,5 +1,5 @@
-package br.com.stimuli.string{
-
+package br.com.stimuli.string
+{
         /**
         *   Creates a string with variable substitutions. Very similiar to printf, specially python's printf
         *   @param raw The string to be substituted.
@@ -42,7 +42,7 @@ package br.com.stimuli.string{
 			*   .xx -> [optional] the precision with witch numbers will be formated  
 			*   x -> the formatter (string, hexa, float, date part)
 			*/
-			var SUBS_RE : RegExp = /%(\((?P<var_name>[\w_\d]+)\))?(\.(?P<precision>[0-9]))?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])/ig;
+			var SUBS_RE : RegExp = /%(\((?P<var_name>[\w_\d]+)\))?(?P<padding>0[0-9])?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])(\.(?P<precision>[0-9]+))?/ig;
 
             var matches : Array = [];
             var result : Object = SUBS_RE.exec(raw);
@@ -52,11 +52,14 @@ package br.com.stimuli.string{
             var numberVariables : int = rest.length;
             // quick check if we find string subs amongst the text to match (something like %(foo)s
             var isPositionalSubts : Boolean = !Boolean(raw.match(/%\(\s*[\w\d_]+\s*\)/));
-            trace(raw, isPositionalSubts);
+            // trace(raw, isPositionalSubts);
             var replacementValue : *;
             var formater : String;
             var varName : String;
             var precision : String;
+            var padding : String;
+            var paddingNum : int;
+            var paddingChar:String;
             // matched through the string, creating Match objects for easier later reuse
             while (Boolean(result)){
                 match = new Match();
@@ -64,12 +67,17 @@ package br.com.stimuli.string{
                 match.length = String(result[0]).length;
                 match.endIndex = match.startIndex + match.length;
                 match.content = String(result[0]);
-                trace(match.content);
+                // trace(match.content);
                 // try to get substitution properties
                 formater = result.formater;
                 varName = result.var_name;
                 precision = result.precision;
+                padding = result.padding;
                 
+                if (padding){
+                    paddingNum = int(padding);
+                }
+               
                 if (isPositionalSubts){
                     // by position, grab next subs:
                     try{
@@ -91,14 +99,16 @@ package br.com.stimuli.string{
                 }
                 // format the string accodingly to the formatter
                 if (formater == STRING_FORMATTER){
-                    match.replacement = replacementValue.toString();
+                    match.replacement = padString(replacementValue.toString(), paddingNum);
                 }else if (formater == FLOAT_FORMATER){
                     // floats, check if we need to truncate precision
                     if (precision){
-                        match.replacement = truncateNumber(Number(replacementValue), int(precision)).toString()
+                        match.replacement = padString(padFloat(Number(replacementValue), int(precision)), paddingNum, getPaddingChar(padding));
                     }else{
-                        match.replacement = replacementValue.toString();
+                        match.replacement = padString(replacementValue.toString(), paddingNum, getPaddingChar(padding));
                     }
+                }else if (formater == INTEGER_FORMATER){
+                    match.replacement = padString(int(replacementValue).toString(), paddingNum, getPaddingChar(padding));
                 }else if (formater == OCTAL_FORMATER){
                     match.replacement = int(replacementValue).toString(8);
                 }else if (formater == HEXA_FORMATER){
@@ -187,14 +197,16 @@ const BAD_VARIABLE_NUMBER : String = "The number of variables to be replaced and
 const STRING_FORMATTER : String = "s";
 /** Outputs as a Number, can use the precision specifier: %.2sf will output a float with 2 decimal digits.*/
 const FLOAT_FORMATER : String = "f";
+/** Outputs as an Integer.*/
+const INTEGER_FORMATER : String = "d";
 /** Converts to an OCTAL number */
 const OCTAL_FORMATER : String = "o";
 /** Converts to a Hexa number (includes 0x) */
 const HEXA_FORMATER : String = "x";
 /** @private */
-const DATES_FORMATERS : String = "aAbBcdHIjmMpSUwWxXyYZ";
+const DATES_FORMATERS : String = "aAbBcDHIjmMpSUwWxXyYZ";
 /** Day of month, from 0 to 30 on <code>Date</code> objects.*/
-const DATE_DAY_FORMATTER : String = "d";
+const DATE_DAY_FORMATTER : String = "D";
 /** Full year, e.g. 2007 on <code>Date</code> objects.*/
 const DATE_FULLYEAR_FORMATTER : String = "Y";
 /** Year, e.g. 07 on <code>Date</code> objects.*/
@@ -214,7 +226,7 @@ const DATE_SECONDS_FORMATTER : String = "S";
 /** A string rep of a <code>Date</code> object on the current locale.*/
 const DATE_TOLOCALE_FORMATTER : String = "c";
 
-var version : String = "$Id$"
+var version : String = "$Id$";
 
   
 
@@ -236,4 +248,59 @@ class Match{
 function truncateNumber(raw : Number, decimals :int =2) : Number {
     var power : int = Math.pow(10, decimals);
    return Math.round(raw * ( power )) / power;
+}
+
+/** @private */
+function padFloat(raw:Number, decimals:int = 2):String
+{
+    var num:Number = truncateNumber(raw, decimals);
+    var numStr:String = num.toString();
+    
+    if (numStr.indexOf(".") == -1)
+        numStr += ".0";
+    
+    var buf:Array = [];
+    var i:int;
+    
+    for (i = 0; i < decimals - numStr.substr(numStr.indexOf(".") + 1).length; i++)
+        buf.push("0");
+    buf.unshift(numStr);
+    
+    return buf.join("");
+}
+
+/** @private */
+function padString(str:String, paddingNum:int, paddingChar:String=" "):String
+{
+    var i:int;
+    var buf:Array = [];
+    for (i = 0; i < Math.abs(paddingNum) - str.length; i++)
+        buf.push(paddingChar);
+    
+    if (paddingNum < 0){
+    	buf.unshift(str);
+    }
+    else{
+    	buf.push(str);
+    }
+        
+    trace("original:", str, ", padded:", buf.join(""), paddingNum);    
+    return buf.join("");
+}
+
+/** @private */
+function getPaddingChar(padding:String):String
+{
+    if (!padding)
+        return " ";
+        
+    var paddingNum:int = int(padding);
+    var paddingChar:String = " ";
+    if (paddingNum >= 0)
+    {
+        if (padding.charAt(0) == "0")
+            paddingChar = "0";
+    }
+    
+    return paddingChar;
 }
