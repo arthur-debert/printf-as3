@@ -44,6 +44,11 @@ package br.com.stimuli.string
 			*/
 			var SUBS_RE : RegExp = /%(\((?P<var_name>[\w_\d]+)\))?(?P<padding>0[0-9])?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])(\.(?P<precision>[0-9]+))?/ig;
 
+			//Return empty string if raw is null, we don't want errors here
+			if( raw == null ){
+				return "";	
+			}
+			
             var matches : Array = [];
             var result : Object = SUBS_RE.exec(raw);
             var match : Match;
@@ -60,6 +65,7 @@ package br.com.stimuli.string
             var padding : String;
             var paddingNum : int;
             var paddingChar:String;
+            
             // matched through the string, creating Match objects for easier later reuse
             while (Boolean(result)){
                 match = new Match();
@@ -80,82 +86,78 @@ package br.com.stimuli.string
                
                 if (isPositionalSubts){
                     // by position, grab next subs:
-                    try{
-                        replacementValue = rest[matches.length];        
-                    }catch(e : Error){
-                        throw new Error(BAD_VARIABLE_NUMBER)
-                    }
-                    
+                     replacementValue = rest[matches.length];
+                   
                 }else{
                     // be hash / properties 
-                    replacementValue = rest[0][varName];
-                    if (replacementValue == undefined){
-                        // check for bad variable names
-                        var errorMsg : String = "Var name:'" + varName + "' not found on " + rest[0];
-                        throw new Error(errorMsg);
-                    }
-                    
-                    
+                    replacementValue = rest[0] == null ? undefined : rest[0][varName];
                 }
-                // format the string accodingly to the formatter
-                if (formater == STRING_FORMATTER){
-                    match.replacement = padString(replacementValue.toString(), paddingNum);
-                }else if (formater == FLOAT_FORMATER){
-                    // floats, check if we need to truncate precision
-                    if (precision){
-                        match.replacement = padString(padFloat(Number(replacementValue), int(precision)), paddingNum, getPaddingChar(padding));
-                    }else{
-                        match.replacement = padString(replacementValue.toString(), paddingNum, getPaddingChar(padding));
-                    }
-                }else if (formater == INTEGER_FORMATER){
-                    match.replacement = padString(int(replacementValue).toString(), paddingNum, getPaddingChar(padding));
-                }else if (formater == OCTAL_FORMATER){
-                    match.replacement = int(replacementValue).toString(8);
-                }else if (formater == HEXA_FORMATER){
-                    match.replacement = "0x" + int(replacementValue).toString(16);
-                }else if(DATES_FORMATERS.indexOf(formater) > -1){
-                    switch (formater){
-                        case DATE_DAY_FORMATTER:
-                            match.replacement = replacementValue.date;
-                            break
-                        case DATE_FULLYEAR_FORMATTER:
-                            match.replacement = replacementValue.fullYear;
-                            break
-                        case DATE_YEAR_FORMATTER:
-                            match.replacement = replacementValue.fullYear.toString().substr(2,2);
-                            break
-                        case DATE_MONTH_FORMATTER:
-                            match.replacement = replacementValue.month + 1;
-                            break
-                        case DATE_HOUR24_FORMATTER:
-                            match.replacement = replacementValue.hours;
-                            break
-                        case DATE_HOUR_FORMATTER:
-                            var hours24 : Number = replacementValue.hours;
-                            match.replacement =  (hours24 -12).toString();
-                            break
-                        case DATE_HOUR_AMPM_FORMATTER:
-                            match.replacement =  (replacementValue.hours  >= 12 ? "p.m" : "a.m");
-                            break
-                        case DATE_TOLOCALE_FORMATTER:
-                            match.replacement = replacementValue.toLocaleString();
-                            break
-                        case DATE_MINUTES_FORMATTER:
-                            match.replacement = replacementValue.minutes;
-                            break
-                        case DATE_SECONDS_FORMATTER:
-                            match.replacement = replacementValue.seconds;
-                            break    
-                    }
-                }else{
-                    trace("no good replacment " );
+                
+                // check for bad variable names
+                if (replacementValue != undefined){
+                    
+	                // format the string accodingly to the formatter
+	                if (formater == STRING_FORMATTER){
+	                    match.replacement = padString(replacementValue.toString(), paddingNum);
+	                }else if (formater == FLOAT_FORMATER){
+	                    // floats, check if we need to truncate precision
+	                    if (precision){
+	                        match.replacement = padString(padFloat(Number(replacementValue), int(precision)), paddingNum, getPaddingChar(padding));
+	                    }else{
+	                        match.replacement = padString(replacementValue.toString(), paddingNum, getPaddingChar(padding));
+	                    }
+	                }else if (formater == INTEGER_FORMATER){
+	                    match.replacement = padString(int(replacementValue).toString(), paddingNum, getPaddingChar(padding));
+	                }else if (formater == OCTAL_FORMATER){
+	                    match.replacement = int(replacementValue).toString(8);
+	                }else if (formater == HEXA_FORMATER){
+	                    match.replacement = "0x" + int(replacementValue).toString(16);
+	                }else if(DATES_FORMATERS.indexOf(formater) > -1){
+	                    switch (formater){
+	                        case DATE_DAY_FORMATTER:
+	                            match.replacement = replacementValue.date;
+	                            break
+	                        case DATE_FULLYEAR_FORMATTER:
+	                            match.replacement = replacementValue.fullYear;
+	                            break
+	                        case DATE_YEAR_FORMATTER:
+	                            match.replacement = replacementValue.fullYear.toString().substr(2,2);
+	                            break
+	                        case DATE_MONTH_FORMATTER:
+	                            match.replacement = replacementValue.month + 1;
+	                            break
+	                        case DATE_HOUR24_FORMATTER:
+	                            match.replacement = replacementValue.hours;
+	                            break
+	                        case DATE_HOUR_FORMATTER:
+	                            var hours24 : Number = replacementValue.hours;
+	                            match.replacement =  (hours24 -12).toString();
+	                            break
+	                        case DATE_HOUR_AMPM_FORMATTER:
+	                            match.replacement =  (replacementValue.hours  >= 12 ? "p.m" : "a.m");
+	                            break
+	                        case DATE_TOLOCALE_FORMATTER:
+	                            match.replacement = replacementValue.toLocaleString();
+	                            break
+	                        case DATE_MINUTES_FORMATTER:
+	                            match.replacement = replacementValue.minutes;
+	                            break
+	                        case DATE_SECONDS_FORMATTER:
+	                            match.replacement = replacementValue.seconds;
+	                            break    
+	                    }
+	                }else{
+	                   //no good replacement
+	                }
+               		
+               		matches.push(match);
                 }
-                matches.push(match);
+                
                 // just a small check in case we get stuck: kludge!
                 runs ++;
                 if (runs > 10000){
-                    trace("something is wrong, breaking out")
-                    break
+                   //something is wrong, breaking out
+                    break;
                 }
                 numMatches ++;
                 // iterates next match
@@ -163,8 +165,8 @@ package br.com.stimuli.string
             }
             // in case there's nothing to substitute, just return the initial string
             if(matches.length == 0){
-                trace("no matches, returning" );
-                return raw;
+                //no matches, returning raw
+               return raw;
             }
             // now actually do the substitution, keeping a buffer to be joined at 
             //the end for better performance
@@ -284,7 +286,6 @@ function padString(str:String, paddingNum:int, paddingChar:String=" "):String
     	buf.push(str);
     }
         
-    trace("original:", str, ", padded:", buf.join(""), paddingNum);    
     return buf.join("");
 }
 

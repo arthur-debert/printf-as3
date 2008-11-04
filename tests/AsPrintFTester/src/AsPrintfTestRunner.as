@@ -13,7 +13,8 @@ private function createSuite():TestSuite
         var ts:TestSuite = new TestSuite();
 
         // utils
-        ts.addTestSuite( PositionalTest );
-        ts.addTestSuite(NamedSubsTests);        
+        ts.addTestSuite(PositionalTest);
+        ts.addTestSuite(NamedSubsTests);      
+        ts.addTestSuite(NullTests);  
         return ts;
 }

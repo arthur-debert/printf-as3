@@ -37,13 +37,7 @@ public class PositionalTest extends TestCase
     }
  
     public function testMoreWholesThanArguments():void{
-    	var e : Error ;
-    	try{
-    		printf("hello %s and %s .", "arthur");
-    	}catch(er : Error){
-    		e = er;
-    	}
- 		 assertNotNull(e);  	
+   		 assertEquals( printf("hello %s and %s .", "arthur"), "hello arthur and %s ." );
     }
 }
 }
