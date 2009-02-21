@@ -14,16 +14,26 @@ package br.com.stimuli.string.tests
 			assertEquals("this is 4.", printf("this is %f.",4));
 		}
 		
-		public function testPaddingOnIntegers() : void{
-			assertEquals("this is 04", printf("this is %02f",4));
+		public function testPaddingOnIntegersNoPaddingChar() : void{
+			assertEquals("this is_  4", printf("this is_%3f",4));
 		}
 		
-		public function testUneededPaddingOnIntegers() : void{
+		public function testPaddingOnIntegersWhiteMultipler() : void{
+			assertEquals("this is_     4", printf("this is_%23f",4));
+		}
+		
+		public function testZeroUneededPaddingOnIntegers() : void{
 			assertEquals("this is 499", printf("this is %03f",499));
 		}	
 		
-		public function testPaddingFloat() : void{
+		public function testUneededPaddingOnIntegers() : void{
+			assertEquals("this is 499", printf("this is %3f",499));
+		}
+		
+		public function testZeroPaddingFloat() : void{
 			assertEquals("this is 08.5", printf("this is %04f",8.5));
 		}	
+		
+		
 	}
 }

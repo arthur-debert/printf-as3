@@ -42,7 +42,7 @@ package br.com.stimuli.string
 			*   .xx -> [optional] the precision with witch numbers will be formated  
 			*   x -> the formatter (string, hexa, float, date part)
 			*/
-			var SUBS_RE : RegExp = /%(\((?P<var_name>[\w_\d]+)\))?(?P<padding>0[0-9])?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])(\.(?P<precision>[0-9]+))?/ig;
+			var SUBS_RE : RegExp = /%(\((?P<var_name>[\w_\d]+)\))?(?P<padding>[0-9]{1,2})?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])(\.(?P<precision>[0-9]+))?/ig;
 
 			//Return empty string if raw is null, we don't want errors here
 			if( raw == null ){
@@ -57,7 +57,6 @@ package br.com.stimuli.string
             var numberVariables : int = rest.length;
             // quick check if we find string subs amongst the text to match (something like %(foo)s
             var isPositionalSubts : Boolean = !Boolean(raw.match(/%\(\s*[\w\d_]+\s*\)/));
-            // trace(raw, isPositionalSubts);
             var replacementValue : *;
             var formater : String;
             var varName : String;
@@ -73,7 +72,6 @@ package br.com.stimuli.string
                 match.length = String(result[0]).length;
                 match.endIndex = match.startIndex + match.length;
                 match.content = String(result[0]);
-                // trace(match.content);
                 // try to get substitution properties
                 formater = result.formater;
                 varName = result.var_name;
@@ -81,7 +79,18 @@ package br.com.stimuli.string
                 padding = result.padding;
                 
                 if (padding){
-                    paddingNum = int(padding);
+                    if (padding.length == 1){
+                        trace("blah", padding );
+                        paddingNum = int(padding);
+                        paddingChar = " ";
+                    }else{
+                        paddingNum = int (padding.substr(-1, 1));
+                        paddingChar = padding.substr(-2, 1)
+                        if (paddingChar != "0"){
+                            paddingNum *= int(paddingChar);
+                            paddingChar = " "
+                        }
+                    } 
                 }
                
                 if (isPositionalSubts){
@@ -98,16 +107,16 @@ package br.com.stimuli.string
                     
 	                // format the string accodingly to the formatter
 	                if (formater == STRING_FORMATTER){
-	                    match.replacement = padString(replacementValue.toString(), paddingNum);
+	                    match.replacement = padString(replacementValue.toString(), paddingNum, paddingChar);
 	                }else if (formater == FLOAT_FORMATER){
 	                    // floats, check if we need to truncate precision
 	                    if (precision){
-	                        match.replacement = padString(padFloat(Number(replacementValue), int(precision)), paddingNum, getPaddingChar(padding));
+	                        match.replacement = padString(String(truncateNumber(Number(replacementValue), int(precision))), paddingNum, paddingChar);
 	                    }else{
-	                        match.replacement = padString(replacementValue.toString(), paddingNum, getPaddingChar(padding));
+	                        match.replacement = padString(replacementValue.toString(), paddingNum, paddingChar);
 	                    }
 	                }else if (formater == INTEGER_FORMATER){
-	                    match.replacement = padString(int(replacementValue).toString(), paddingNum, getPaddingChar(padding));
+	                    match.replacement = padString(int(replacementValue).toString(), paddingNum, paddingChar);
 	                }else if (formater == OCTAL_FORMATER){
 	                    match.replacement = int(replacementValue).toString(8);
 	                }else if (formater == HEXA_FORMATER){
@@ -252,28 +261,12 @@ function truncateNumber(raw : Number, decimals :int =2) : Number {
    return Math.round(raw * ( power )) / power;
 }
 
-/** @private */
-function padFloat(raw:Number, decimals:int = 2):String
-{
-    var num:Number = truncateNumber(raw, decimals);
-    var numStr:String = num.toString();
-    
-    if (numStr.indexOf(".") == -1)
-        numStr += ".0";
-    
-    var buf:Array = [];
-    var i:int;
-    
-    for (i = 0; i < decimals - numStr.substr(numStr.indexOf(".") + 1).length; i++)
-        buf.push("0");
-    buf.unshift(numStr);
-    
-    return buf.join("");
-}
 
 /** @private */
 function padString(str:String, paddingNum:int, paddingChar:String=" "):String
 {
+    if(paddingChar == null) return str;
+    
     var i:int;
     var buf:Array = [];
     for (i = 0; i < Math.abs(paddingNum) - str.length; i++)
@@ -285,23 +278,6 @@ function padString(str:String, paddingNum:int, paddingChar:String=" "):String
     else{
     	buf.push(str);
     }
-        
+    trace("str '"+ str + "'", "paddingNum", paddingNum, "char '" + paddingChar + "'", "returning '" + buf.join("") + "'");    
     return buf.join("");
-}
-
-/** @private */
-function getPaddingChar(padding:String):String
-{
-    if (!padding)
-        return " ";
-        
-    var paddingNum:int = int(padding);
-    var paddingChar:String = " ";
-    if (paddingNum >= 0)
-    {
-        if (padding.charAt(0) == "0")
-            paddingChar = "0";
-    }
-    
-    return paddingChar;
 }

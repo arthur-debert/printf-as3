@@ -43,7 +43,7 @@ public class PositionalTest extends TestCase
     	}catch(er : Error){
     		e = er;
     	}
- 		 assertNotNull(e);  	
+ 		 assertNull(e);  	
     }
 }
 }

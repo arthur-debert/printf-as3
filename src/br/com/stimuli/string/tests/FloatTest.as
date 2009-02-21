@@ -20,6 +20,12 @@ package br.com.stimuli.string.tests
 		
 		public function testFloatWithPrecision() : void{
 			assertEquals("this is 4.4234", printf("this is %f.4", 4.42343232));
-		}		
+		}
+		
+		public function testUntypedWithPrecision() : void{
+		    var v : * = 4.444444;
+		    assertEquals("this is 4.44", printf("this is %f.2", v));
+		}
+		
 	}
 }
