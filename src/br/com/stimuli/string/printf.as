@@ -102,6 +102,9 @@ package br.com.stimuli.string
                 }
                 
                 // check for bad variable names
+                if (replacementValue == undefined){
+                   replacementValue = "";
+                }
                 if (replacementValue != undefined){
                     
 	                // format the string accodingly to the formatter

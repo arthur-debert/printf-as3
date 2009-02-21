@@ -38,14 +38,13 @@ public class NamedSubsTests extends TestCase
     
     public function testMissingVar():void{
     	// this should raise an error:
-    	var error : Error;
-    	try{
-    		assertEquals( "I am Arthur and I am a developer.", printf("I am %(something)s and I am a %(occupation)s.", dict));
-    	}catch(e : Error){
-    		error = e;
-    	}
- 		assertNotNull(error);
- 		
+    	assertEquals( "I am  and I am a developer.", printf("I am %(something)s and I am a %(occupation)s.", dict));
     }
+    
+    public function testNullVar():void{
+    	// this should raise an error:
+    	assertEquals( "I am  and I am a .", printf("I am %(something)s and I am a %(occupation)s.", {}));
+    }
+    
 }
 }

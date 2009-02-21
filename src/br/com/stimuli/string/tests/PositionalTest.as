@@ -36,7 +36,7 @@ public class PositionalTest extends TestCase
  		assertEquals(printf("hello %s.", "arthur", "useless"), "hello arthur.");   	
     }
  
-    public function testMoreWholesThanArguments():void{
+    public function testMoreWholesThanArgumentsWillNotThrowError():void{
     	var e : Error ;
     	try{
     		printf("hello %s and %s .", "arthur");
@@ -44,6 +44,14 @@ public class PositionalTest extends TestCase
     		e = er;
     	}
  		 assertNull(e);  	
+    }
+    
+    public function testMoreWholesThanArgumentsIgnoreFormats():void{
+    		assertEquals("hello arthur and  .", printf("hello %s and %s .", "arthur"));	
+    }
+    
+    public function testNoVars():void{
+    		assertEquals("hello  and  .", printf("hello %s and %s ."));	
     }
 }
 }
