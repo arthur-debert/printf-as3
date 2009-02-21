@@ -120,7 +120,7 @@ package br.com.stimuli.string
 	                }else if (formater == INTEGER_FORMATER){
 	                    match.replacement = padString(int(replacementValue).toString(), paddingNum, paddingChar);
 	                }else if (formater == OCTAL_FORMATER){
-	                    match.replacement = int(replacementValue).toString(8);
+	                    match.replacement = "0" + int(replacementValue).toString(8);
 	                }else if (formater == HEXA_FORMATER){
 	                    match.replacement = "0x" + int(replacementValue).toString(16);
 	                }else if(DATES_FORMATERS.indexOf(formater) > -1){
