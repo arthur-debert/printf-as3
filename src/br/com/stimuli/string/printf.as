@@ -80,7 +80,6 @@ package br.com.stimuli.string
                 
                 if (padding){
                     if (padding.length == 1){
-                        trace("blah", padding );
                         paddingNum = int(padding);
                         paddingChar = " ";
                     }else{
@@ -277,7 +276,6 @@ function padString(str:String, paddingNum:int, paddingChar:String=" "):String
     }
     else{
     	buf.push(str);
-    }
-    trace("str '"+ str + "'", "paddingNum", paddingNum, "char '" + paddingChar + "'", "returning '" + buf.join("") + "'");    
+    }    
     return buf.join("");
 }
