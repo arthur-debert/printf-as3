@@ -42,7 +42,7 @@ package br.com.stimuli.string
 			*   .xx -> [optional] the precision with witch numbers will be formated  
 			*   x -> the formatter (string, hexa, float, date part)
 			*/
-			var SUBS_RE : RegExp = /%(\((?P<var_name>[\w_\d]+)\))?(?P<padding>[0-9]{1,2})?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])(\.(?P<precision>[0-9]+))?/ig;
+			var SUBS_RE : RegExp = /%(?!^%)(\((?P<var_name>[\w_\d]+)\))?(?P<padding>[0-9]{1,2})?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])(\.(?P<precision>[0-9]+))?/ig;
 
 			//Return empty string if raw is null, we don't want errors here
 			if( raw == null ){
