@@ -113,7 +113,10 @@ package br.com.stimuli.string
 	                }else if (formater == FLOAT_FORMATER){
 	                    // floats, check if we need to truncate precision
 	                    if (precision){
-	                        match.replacement = padString(String(truncateNumber(Number(replacementValue), int(precision))), paddingNum, paddingChar);
+	                        match.replacement = padString( 
+	                                        Number(replacementValue).toFixed( int(precision)),
+	                                        paddingNum, 
+	                                        paddingChar);
 	                    }else{
 	                        match.replacement = padString(replacementValue.toString(), paddingNum, paddingChar);
 	                    }
@@ -257,12 +260,6 @@ class Match{
         return "Match [" + startIndex + " - " + endIndex + "] (" + length + ") " + content + ", replacement:" +replacement + ";"
     }
 }
-/** @private */
-function truncateNumber(raw : Number, decimals :int =2) : Number {
-    var power : int = Math.pow(10, decimals);
-   return Math.round(raw * ( power )) / power;
-}
-
 
 /** @private */
 function padString(str:String, paddingNum:int, paddingChar:String=" "):String
