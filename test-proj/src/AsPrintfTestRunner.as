@@ -1,5 +1,5 @@
 import flexunit.framework.TestSuite;
-
+import br.com.stimuli.string.tests.*;
 
                         
 private function onCreationComplete():void
