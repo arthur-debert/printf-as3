@@ -11,7 +11,6 @@ private function onCreationComplete():void
 private function createSuite():TestSuite
 {
         var ts:TestSuite = new TestSuite();
-
         ts.addTestSuite(FloatTest);  
         ts.addTestSuite(DateTest);  
         ts.addTestSuite(EscapingTest);  

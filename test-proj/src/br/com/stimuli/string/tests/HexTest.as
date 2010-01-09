@@ -1,7 +1,7 @@
 package br.com.stimuli.string.tests
 {
     import flexunit.framework.TestCase
-    import br.com.stimuli.string.printf;
+    
     
     public class HexTest extends TestCase
     {
