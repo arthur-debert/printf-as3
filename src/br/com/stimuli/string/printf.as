@@ -42,13 +42,13 @@ package br.com.stimuli.string
 			*   .xx -> [optional] the precision with witch numbers will be formated  
 			*   x -> the formatter (string, hexa, float, date part)
 			*/
-			var SUBS_RE : RegExp = /%(?!^%)(\((?P<var_name>[\w_\d]+)\))?(?P<padding>[0-9]{1,2})?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])(\.(?P<precision>[0-9]+))?/ig;
-
+            var SUBS_RE : RegExp = /%(?!^%)(\((?P<var_name>[\w]+[\w_\d]+)\))?(?P<padding>[0-9]{1,2})?(\.(?P<precision>[0-9]+))?(?P<formater>[sxofaAbBcdHIjmMpSUwWxXyYZ])/ig;
+            
 			//Return empty string if raw is null, we don't want errors here
 			if( raw == null ){
 				return "";	
 			}
-			
+			//trace("\n\n" + 'input:"'+ raw+  '" , args:', rest.join(", ")) ;
             var matches : Array = [];
             var result : Object = SUBS_RE.exec(raw);
             var match : Match;
@@ -77,7 +77,7 @@ package br.com.stimuli.string
                 varName = result.var_name;
                 precision = result.precision;
                 padding = result.padding;
-                
+                //trace('formater:', formater, ', varName:', varName, ', precision:', precision, 'padding:', padding);
                 if (padding){
                     if (padding.length == 1){
                         paddingNum = int(padding);
@@ -91,7 +91,6 @@ package br.com.stimuli.string
                         }
                     } 
                 }
-               
                 if (isPositionalSubts){
                     // by position, grab next subs:
                      replacementValue = rest[matches.length];
@@ -100,7 +99,6 @@ package br.com.stimuli.string
                     // be hash / properties 
                     replacementValue = rest[0] == null ? undefined : rest[0][varName];
                 }
-                
                 // check for bad variable names
                 if (replacementValue == undefined){
                    replacementValue = "";
@@ -163,7 +161,6 @@ package br.com.stimuli.string
 	                }else{
 	                   //no good replacement
 	                }
-               		
                		matches.push(match);
                 }
                 
@@ -201,6 +198,7 @@ package br.com.stimuli.string
             }
             // buffer the tail of the string: text after the last substitution
             buffer.push(raw.substr(match.endIndex, raw.length - match.endIndex));
+            //trace('returning: "'+ buffer.join("")+'"');
             return buffer.join("");
         }
     }
@@ -243,8 +241,6 @@ const DATE_SECONDS_FORMATTER : String = "S";
 const DATE_TOLOCALE_FORMATTER : String = "c";
 
 var version : String = "$Id$";
-
-  
 
 /** @private
  * Internal class that normalizes matching information.

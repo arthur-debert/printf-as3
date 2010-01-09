@@ -12,7 +12,6 @@ private function createSuite():TestSuite
 {
         var ts:TestSuite = new TestSuite();
 
-        // utils
         ts.addTestSuite(FloatTest);  
         ts.addTestSuite(DateTest);  
         ts.addTestSuite(EscapingTest);  
