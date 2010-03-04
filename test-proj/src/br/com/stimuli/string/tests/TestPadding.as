@@ -34,6 +34,10 @@ package br.com.stimuli.string.tests
 			assertEquals("this is 08.5", printf("this is %04f",8.5));
 		}	
 		
+		public function testMultiplePadding():void
+		{
+			assertEquals("this is 001A", printf("this is %03d%s",1,'A'));
+		}
 		
 	}
 }

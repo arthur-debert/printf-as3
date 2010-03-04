@@ -77,6 +77,8 @@ package
                 varName = result.var_name;
                 precision = result.precision;
                 padding = result.padding;
+				paddingNum = 0;
+				paddingChar = null;
                 //trace('formater:', formater, ', varName:', varName, ', precision:', precision, 'padding:', padding);
                 if (padding){
                     if (padding.length == 1){
@@ -273,5 +275,6 @@ function padString(str:String, paddingNum:int, paddingChar:String=" "):String
     else{
     	buf.push(str);
     }    
+
     return buf.join("");
 }
