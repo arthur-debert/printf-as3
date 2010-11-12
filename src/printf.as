@@ -68,15 +68,15 @@ package
             // matched through the string, creating Match objects for easier later reuse
             while (Boolean(result)){
                 match = new Match();
-                match.startIndex = result.index;
+                match.startIndex = result["index"];
                 match.length = String(result[0]).length;
                 match.endIndex = match.startIndex + match.length;
                 match.content = String(result[0]);
                 // try to get substitution properties
-                formater = result.formater;
-                varName = result.var_name;
-                precision = result.precision;
-                padding = result.padding;
+                formater = result["formater"];
+                varName = result["var_name"];
+                precision = result["precision"];
+                padding = result["padding"];
 				paddingNum = 0;
 				paddingChar = null;
                 //trace('formater:', formater, ', varName:', varName, ', precision:', precision, 'padding:', padding);
@@ -86,10 +86,10 @@ package
                         paddingChar = " ";
                     }else{
                         paddingNum = int (padding.substr(-1, 1));
-                        paddingChar = padding.substr(-2, 1)
+                        paddingChar = padding.substr(-2, 1);
                         if (paddingChar != "0"){
                             paddingNum *= int(paddingChar);
-                            paddingChar = " "
+                            paddingChar = " ";
                         }
                     } 
                 }
@@ -109,7 +109,21 @@ package
                     
 	                // format the string accodingly to the formatter
 	                if (formater == STRING_FORMATTER){
-	                    match.replacement = padString(replacementValue.toString(), paddingNum, paddingChar);
+	                	
+	                	/**
+	                	 * When any property is found to fill the match usually we get a string with the data provider class name,
+	                	 * but sometimes we just want have the original value without any replacement.
+	                	 */
+	                	
+	                	const string : String = String(replacementValue);
+	                	const malformed : Boolean = string.split("[object Dictionary]").length > 1 || string.split("[object Object]").length > 1;
+	                	
+	                	if (malformed) {
+							match.replacement = "%s";
+	                	} else {
+	                		match.replacement = padString(string, paddingNum, paddingChar);
+	                	}
+						
 	                }else if (formater == FLOAT_FORMATER){
 	                    // floats, check if we need to truncate precision
 	                    if (precision){
@@ -118,7 +132,7 @@ package
 	                                        paddingNum, 
 	                                        paddingChar);
 	                    }else{
-	                        match.replacement = padString(replacementValue.toString(), paddingNum, paddingChar);
+	                        match.replacement = padString(String(replacementValue), paddingNum, paddingChar);
 	                    }
 	                }else if (formater == INTEGER_FORMATER){
 	                    match.replacement = padString(int(replacementValue).toString(), paddingNum, paddingChar);
@@ -129,36 +143,36 @@ package
 	                }else if(DATES_FORMATERS.indexOf(formater) > -1){
 	                    switch (formater){
 	                        case DATE_DAY_FORMATTER:
-	                            match.replacement = replacementValue.date;
-	                            break
+	                            match.replacement = replacementValue["date"];
+	                            break;
 	                        case DATE_FULLYEAR_FORMATTER:
-	                            match.replacement = replacementValue.fullYear;
-	                            break
+	                            match.replacement = replacementValue["fullYear"];
+	                            break;
 	                        case DATE_YEAR_FORMATTER:
-	                            match.replacement = replacementValue.fullYear.toString().substr(2,2);
-	                            break
+	                            match.replacement = String(replacementValue["fullYear"]).substr(2,2);
+	                            break;
 	                        case DATE_MONTH_FORMATTER:
-	                            match.replacement = replacementValue.month + 1;
-	                            break
+	                            match.replacement = String(replacementValue["month"] + 1);
+	                            break;
 	                        case DATE_HOUR24_FORMATTER:
-	                            match.replacement = replacementValue.hours;
-	                            break
+	                            match.replacement = replacementValue["hours"];
+	                            break;
 	                        case DATE_HOUR_FORMATTER:
-	                            var hours24 : Number = replacementValue.hours;
+	                            var hours24 : Number = replacementValue["hours"];
 	                            match.replacement =  (hours24 -12).toString();
-	                            break
+	                            break;
 	                        case DATE_HOUR_AMPM_FORMATTER:
-	                            match.replacement =  (replacementValue.hours  >= 12 ? "p.m" : "a.m");
-	                            break
+	                            match.replacement = (replacementValue["hours"]  >= 12 ? "p.m" : "a.m");
+	                            break;
 	                        case DATE_TOLOCALE_FORMATTER:
-	                            match.replacement = replacementValue.toLocaleString();
-	                            break
+	                            match.replacement = replacementValue["toLocaleString"]();
+	                            break;
 	                        case DATE_MINUTES_FORMATTER:
-	                            match.replacement = replacementValue.minutes;
-	                            break
+	                            match.replacement = replacementValue["minutes"];
+	                            break;
 	                        case DATE_SECONDS_FORMATTER:
-	                            match.replacement = replacementValue.seconds;
-	                            break    
+	                            match.replacement = replacementValue["seconds"];
+	                            break;    
 	                    }
 	                }else{
 	                   //no good replacement
@@ -186,7 +200,7 @@ package
             var buffer : Array = [];
             var lastMatch : Match;  
             // beggininf os string, if it doesn't start with a substitition
-            var previous : String = raw.substr(0, matches[0].startIndex);
+            var previous : String = raw.substr(0, Match(matches[0]).startIndex);
             var subs : String;
             for each(match in matches){
                 // finds out the previous string part and the next substitition
@@ -255,7 +269,7 @@ class Match{
     public var replacement : String;
     public var before : String;
     public function toString() : String{
-        return "Match [" + startIndex + " - " + endIndex + "] (" + length + ") " + content + ", replacement:" +replacement + ";"
+        return "Match [" + startIndex + " - " + endIndex + "] (" + length + ") " + content + ", replacement:" +replacement + ";";
     }
 }
 
