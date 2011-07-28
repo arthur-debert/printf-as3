@@ -260,21 +260,9 @@ class Match{
 }
 
 /** @private */
-function padString(str:String, paddingNum:int, paddingChar:String=" "):String
+function padString(str:String, paddingNum:int, paddingChar:String=" ") : String
 {
     if(paddingChar == null) return str;
     
-    var i:int;
-    var buf:Array = [];
-    for (i = 0; i < Math.abs(paddingNum) - str.length; i++)
-        buf.push(paddingChar);
-    
-    if (paddingNum < 0){
-    	buf.unshift(str);
-    }
-    else{
-    	buf.push(str);
-    }    
-
-    return buf.join("");
+    return new Array(paddingNum + 1).join(paddingChar).concat(str);
 }
