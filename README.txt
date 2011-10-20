@@ -3,7 +3,7 @@ Function for doing string variable substitutions in AS3.
 
 Inspired by python's print and strtime.
 
-MIT licensed.
+MIT licensed. http://mit-license.org//
 
 Some basic usage:
 
