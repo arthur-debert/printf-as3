@@ -264,5 +264,5 @@ function padString(str:String, paddingNum:int, paddingChar:String=" ") : String
 {
     if(paddingChar == null) return str;
     
-    return new Array(paddingNum + 1).join(paddingChar).concat(str);
+    return new Array(paddingNum).join(paddingChar).substr(0,paddingNum-str.length).concat(str);
 }
