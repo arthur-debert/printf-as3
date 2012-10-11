@@ -35,4 +35,4 @@ For more examples, see the test suit in [test-proj/src][tests]...
 
 [arthur-debert]:http://www.stimuli.com.br
 [mit]:http://mit-license.org
-[tests]:./tree/master/test-proj/src
+[tests]:./printf-as3/tree/master/test-proj/src
