@@ -28,11 +28,11 @@ Inspired by python's print and strtime.
     var date : Date = new Date();
     printf("Today is %d/%m/%Y", date, date, date);
 
-For more examples, see the test suit in [tree/master/test-proj/src][tests]...
+For more examples, see the test suit in [test-proj/src][tests]...
 
 ### License
 [MIT][mit] licensed.
 
 [arthur-debert]:http://www.stimuli.com.br
 [mit]:http://mit-license.org
-[tests]:./test-proj/src
+[tests]:./tree/master/test-proj/src
